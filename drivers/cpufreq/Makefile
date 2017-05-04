@@ -23,6 +23,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_DARKNESS)	+= cpufreq_darkness.o
 obj-$(CONFIG_CPU_FREQ_GOV_COMMON)	+= cpufreq_governor.o
 obj-$(CONFIG_CPU_FREQ_GOV_SMARTMAX)  += cpufreq_smartmax.o
 obj-$(CONFIG_CPU_FREQ_GOV_ELEMENTALX)  += cpufreq_elementalx.o
+>>>>>>> 02e6140a941d... added smartmax and elementalx gov
 obj-$(CONFIG_CPU_BOOST)			+= cpu-boost.o
 obj-$(CONFIG_CPU_FREQ_GOV_YANKACTIVE)	+= cpufreq_yankactive.o
 
