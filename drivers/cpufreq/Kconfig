@@ -137,6 +137,35 @@ config CPU_FREQ_DEFAULT_GOV_LIONFISH
 	help
 	  Use the CPUFreq governor 'lionfish' as default.
 	
+config CPU_FREQ_DEFAULT_GOV_ALUCARD
+	bool "alucard"
+	select CPU_FREQ_GOV_ALUCARD
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the CPUFreq governor 'alucard' as default. A favourite choice and one of the original governors that Alucard_24 made. 
+          Alucard is based on ondemand but has been heavily tweaked to bring better battery life and performance.
+          It has been known to be battery friendly without sacrificing much performance. If unsure have a look at the help section of the
+	  driver. Fallback governor will be the performance governor.
+
+	  
+config CPU_FREQ_DEFAULT_GOV_BLU_ACTIVE
+	bool "blu_active"
+	select CPU_FREQ_GOV_BLU_ACTIVE
+	help
+	  Use the CPUFreq governor 'blu_active' as default. This allows
+	  you to get a full dynamic cpu frequency capable system by simply
+	  loading your cpufreq low-level hardware driver, using the
+	  'interactive' governor for latency-sensitive workloads.	  
+
+config CPU_FREQ_DEFAULT_GOV_NIGHTMARE
+	bool "nightmare"
+	select CPU_FREQ_GOV_NIGHTMARE
+	help
+
+config CPU_FREQ_DEFAULT_GOV_DARKNESS
+ 	bool "darkness"
+ 	select CPU_FREQ_GOV_DARKNESS
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -218,6 +247,12 @@ config CPU_FREQ_GOV_IMPULSE
 	  designed for latency-sensitive workloads.
 
 	  If in doubt, say N.
+config CPU_FREQ_GOV_NIGHTMARE
+	tristate "'nightmare' cpufreq governor"
+	depends on CPU_FREQ
+
+config CPU_FREQ_GOV_DARKNESS
+	tristate "'darkness' cpufreq policy governor"
 
 config CPU_FREQ_GOV_CONSERVATIVE
 	tristate "'conservative' cpufreq governor"
