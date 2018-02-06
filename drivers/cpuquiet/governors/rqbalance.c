@@ -36,6 +36,7 @@
 #include <linux/jiffies.h>
 #include <linux/cpu.h>
 #include <linux/sched.h>
+#include <linux/slab.h>
 
 #include "../cpuquiet.h"
 
@@ -78,8 +79,8 @@ typedef enum {
 #define USERSPACE_LOW_POWER	1
 
 #define CLUSTER_LITTLE		0
-#define CLUSTER_BIG		1
-#define MAX_CLUSTERS		2
+#define CLUSTER_BIG		4
+#define MAX_CLUSTERS		7
 
 struct idle_info {
 	u64 idle_last;
@@ -426,7 +427,6 @@ static CPU_SPEED_BALANCE balanced_speed_balance(void)
 
 	unsigned int avg_nr_run = get_nr_run_avg();
 	unsigned int nr_run;
-	bool done;
 
 	/* First use the up thresholds to see if we need to bring CPUs online. */
 	pr_debug("%s: Current core count max runqueue: %d\n", __func__,
@@ -447,7 +447,7 @@ static CPU_SPEED_BALANCE balanced_speed_balance(void)
 	 * down threshold comparison loop.
 	 */
 	for ( ; nr_run > 1; --nr_run) {
-		if (done || avg_nr_run >= nr_down_run_thresholds[nr_run - 1]) {
+		if (avg_nr_run >= nr_down_run_thresholds[nr_run - 1]) {
 			/* We have fewer things running than our down threshold.
 			   Use one less CPU. */
 			break;
@@ -557,10 +557,10 @@ static void rqbalance_work_func(struct work_struct *work)
 		if (cpu < nr_cpu_ids)
 			up = false;
 		else
-			stop_load_timer();
+		stop_load_timer();
 
-			queue_delayed_work(rqbalance_wq,
-						 &rqbalance_work, up_delay);
+		queue_delayed_work(rqbalance_wq,
+				   &rqbalance_work, up_delay);
 		break;
 	case UP:
 		balance = balanced_speed_balance();
@@ -617,7 +617,7 @@ static int balanced_cpufreq_transition(struct notifier_block *nb,
 		if (num_online_cluster_cpus(CLUSTER_BIG) > 0)
 			n = 1;
 
-	if (state == CPUFREQ_POSTCHANGE || state == CPUFREQ_RESUMECHANGE) {
+	if (state == CPUFREQ_POSTCHANGE) {
 		cpu_freq = freqs->new;
 
 		switch (rqbalance_state) {
@@ -720,6 +720,22 @@ static ssize_t store_uint_array(struct cpuquiet_attribute *cattr,
 		((unsigned int*)cattr->param)[j] = val;
 	}
 
+	/* If we are setting nr_run_thresholds ensure
+	   the target MAX is set */
+	if (!strncmp(cattr->attr.name, "nr_run_thresholds",
+				strlen(cattr->attr.name)-2)) {
+		int x, max_cpu_id = 0;
+
+		for_each_possible_cpu(x)
+			max_cpu_id++;
+
+		/* Set value as target MAX on-line number of CPUs */
+		if (((unsigned int*)cattr->param)[max_cpu_id] != UINT_MAX &&
+			max_cpu_id < sz) {
+			((unsigned int*)cattr->param)[max_cpu_id] = UINT_MAX;
+		}
+	}
+
 	return count;
 }
 
@@ -788,7 +804,7 @@ static void rqbalance_kickstart(void)
 	/*FIXME: Kick start the state machine by faking a freq notification*/
 	initial_freq.new = cpufreq_get(0);
 	if (initial_freq.new != 0)
-		balanced_cpufreq_transition(NULL, CPUFREQ_RESUMECHANGE,
+		balanced_cpufreq_transition(NULL, CPUFREQ_POSTCHANGE,
 						&initial_freq);
 }
 
