@@ -20,7 +20,7 @@ TOOL_CHAIN_ARM=aarch64-linux-android-
 #@@@@@@@@@@@@@@@@@@@@@@ DEFINITIONS BEGIN @@@@@@@@@@@@@@@@@@@@@@@@@@@#
 ##### Tool-chain, you should get it yourself which tool-chain
 ##### you would like to use
-KERNEL_TOOLCHAIN=/root/aarch64-linux-android-4.9/bin/$TOOL_CHAIN_ARM
+KERNEL_TOOLCHAIN=~/Desktop/kernel-n/android_kernel_xiaomi_markw_n/tool/rom/bin/$TOOL_CHAIN_ARM
 
 ## This script should be inside the kernel-code directory
 KERNEL_DIR=$PWD
@@ -32,7 +32,7 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 ## should be preset in arch/arm/configs of kernel-code
-KERNEL_DEFCONFIG=mido_defconfig
+KERNEL_DEFCONFIG=markw_defconfig
 
 ## make jobs
 MAKE_JOBS=$(grep -c ^processor /proc/cpuinfo)
@@ -148,7 +148,7 @@ echo "generating changelog . . .";
 git --no-pager log --pretty=oneline --abbrev-commit 1ded9a48..HEAD > $AROMA/changelog.txt
 
 #ubah nama device masing-masing (ido)
-ZIP=ZPX-Inferno-$z-Mido-Nougat-$DATE.zip;
+ZIP=ZPX-Inferno-$z-Markw-Nougat-$DATE.zip;
 
 # Create flashable zip
 if [ -f $KERNELPATH/$ZIMAGE ]; then
@@ -160,7 +160,7 @@ cd ../..;
 
 # The whole process is now complete. Now do some touches...
 # move ZIP to /root
-mv -f $ANYKERNEL/$ZIP /root/mido/$ZIP;
+mv -f $ANYKERNEL/$ZIP ~/markw/$ZIP;
 
 #Then doing cleanup
 echo "Doing post-cleanup...";

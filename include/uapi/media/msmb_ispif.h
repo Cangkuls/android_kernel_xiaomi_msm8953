@@ -89,7 +89,9 @@ struct msm_ispif_pack_cfg {
 	int pixel_swap_en;
 	enum msm_ispif_pixel_odd_even even_odd_sel;
 	enum msm_ispif_pixel_pack_mode pack_mode;
+
 };
+
 
 struct msm_ispif_params_entry {
 	enum msm_ispif_vfe_intf vfe_intf;
