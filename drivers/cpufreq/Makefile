@@ -48,9 +48,6 @@ obj-$(CONFIG_CPU_FREQ_GOV_DARKNESS)	+= cpufreq_darkness.o
 obj-$(CONFIG_CPU_FREQ_GOV_COMMON)	+= cpufreq_governor.o
 obj-$(CONFIG_CPU_FREQ_GOV_SMARTMAX)  += cpufreq_smartmax.o
 obj-$(CONFIG_CPU_FREQ_GOV_ELEMENTALX)  += cpufreq_elementalx.o
-<<<<<<< HEAD
-=======
->>>>>>> e0ce4def1be8... GOV : Added InteractiveX,Nightmare,Lulzactiveq,Pegasusq,Sakuractive,Smartassv2,Zzmove Gov
 obj-$(CONFIG_CPU_BOOST)			+= cpu-boost.o
 obj-$(CONFIG_CPU_FREQ_GOV_YANKACTIVE)	+= cpufreq_yankactive.o
 
